@@ -1,0 +1,2 @@
+class MenüEingabe:
+    pass

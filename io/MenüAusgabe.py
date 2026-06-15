@@ -1,0 +1,2 @@
+class MenüAusgabe:
+    pass

@@ -1,0 +1,2 @@
+class Koordinate:
+    pass
