@@ -1,2 +1,6 @@
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
 class Koordinate:
-    pass
+    zeile: int
+    spalte: int

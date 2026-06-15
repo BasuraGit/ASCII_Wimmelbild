@@ -6,3 +6,9 @@ class Spielfeld:
         self.Feld = list()
         self.Zielsymbol = Konfiguration.Zielsymbol
         self.Zielposition = [0,0]
+
+    def generieren():
+        pass
+    
+    def anzeigen():
+        pass

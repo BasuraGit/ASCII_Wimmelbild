@@ -4,6 +4,7 @@ class Konfiguration:
         self.Spalten = 5
         self.Zielsymbollaenge = 1
         self.Timer = 60
+        self.ZeichenAbstand = 1
     
     def reduceTimer(self):
         if self.Timer > 30:
