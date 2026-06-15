@@ -4,15 +4,18 @@ from ..io import SpielEingabe
 from ..io import SpielAusgabe
 
 class Spiel:
-    def __init__(self, Konfiguration):
-        self.spielfeld = Spielfeld(Konfiguration)
-        self.schwierigkeit = Schwierigkeit(Konfiguration)
-        self.aktuelle_Runde = 1
-        self.spielAusgabe = SpielAusgabe()
-        self.spielEingabe = SpielEingabe()
+    def __init__(self, _Konfiguration):
+        self._Spielfeld = Spielfeld(_Konfiguration)
+        self._Schwierigkeit = Schwierigkeit(_Konfiguration)
+        self._Aktuelle_Runde = 1
+        self._Spiel_Ausgabe = SpielAusgabe()
+        self._Spiel_Eingabe = SpielEingabe()
     
     def starten(self):
-        pass
+        self._Spielfeld.generieren()
+        self._Spielfeld.ausgeben()
+        self._Timer.start()
+        self._Spiel_Eingabe.start()
     
     def neue_runde(self):
         pass

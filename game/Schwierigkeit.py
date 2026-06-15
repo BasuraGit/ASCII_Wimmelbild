@@ -1,2 +1,8 @@
+from dataclasses import dataclass
+
+@dataclass
 class Schwierigkeit:
-    pass
+    _Zeilen: int
+    _Spalten: int
+    _Zielsymbollaenge: int
+    _ZeichenAbstand: int
