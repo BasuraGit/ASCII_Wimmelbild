@@ -1,19 +1,19 @@
+from game.Schwierigkeit import Schwierigkeit
+
 class Konfiguration:
     def __init__(self):
-        self.Zeilen = 5
-        self.Spalten = 5
-        self.Zielsymbollaenge = 1
-        self.Timer = 60
+        self.schwierigkeit = Schwierigkeit(5,5,1,0,1)
+        self.timer_max = 60
     
-    def reduceTimer(self):
-        if self.Timer > 30:
-            self.Timer -= 10
+    def reduce_timer_max(self):
+        if self.timer_max > 30:
+            self.timer_max -= 10
 
-        elif self.Timer > 15:
-            self.Timer -= 5
+        elif self.timer_max > 15:
+            self.timer_max -= 5
 
-        elif self.Timer > 8:
-            self.Timer -= 2
+        elif self.timer_max > 8:
+            self.timer_max -= 2
 
-        elif self.Timer > 5:
-            self.Timer -= 1
+        elif self.timer_max > 5:
+            self.timer_max -= 1
