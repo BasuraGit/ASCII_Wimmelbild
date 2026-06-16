@@ -1,8 +1,10 @@
-from .game import Spiel
-from .util import Konfiguration
-from .io import HauptMenü
+from game.Spiel import Spiel
+from util.Konfiguration import Konfiguration
+from ui.HauptMenue import HauptMenue
 
-_Konfiguration = Konfiguration()
+konfiguration = Konfiguration()
 
 
-Spiel(_Konfiguration)
+spiel=Spiel(konfiguration)
+
+spiel.starten()

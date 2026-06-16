@@ -2,7 +2,8 @@ from dataclasses import dataclass
 
 @dataclass
 class Schwierigkeit:
-    _Zeilen: int
-    _Spalten: int
-    _Zielsymbollaenge: int
-    _ZeichenAbstand: int
+    zeilen: int
+    spalten: int
+    zielsymbollaenge: int
+    zeilen_abstand: int
+    spalten_abstand: int

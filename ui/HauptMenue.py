@@ -1,0 +1,2 @@
+class HauptMenue:
+    pass

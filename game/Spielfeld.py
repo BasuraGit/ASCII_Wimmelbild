@@ -1,14 +1,26 @@
-from ..util import Zufallsgenerator as zg
+from util import Zufallsgenerator as zg
 
 class Spielfeld:
-    def __init__(self, _Konfiguration):
-        self._Konfiguration = _Konfiguration
-        self._Feld = list()
-        self._Zielsymbol = zg.generiere_random_chars('\0', _Konfiguration._Schwierigkeit._Zielsymbollaenge)
-        self._Zielposition = zg.generiere_Position()
+    def __init__(self, konfiguration):
+        self.konfiguration = konfiguration
+        self.sk = self.konfiguration.schwierigkeit
+        self.feld = list()
 
-    def generieren():
-        pass
+    def generieren(self):
+        zielsymbolarray = zg.generiere_random_chars(self.sk.zielsymbollaenge)
+        self.zielsymbol = str()
+        for char in zielsymbolarray:
+            self.zielsymbol += char
+        self.zielposition = zg.generiere_Position(self.sk)
 
-    def anzeigen():
-        pass
+        for zeile in range(self.sk.zeilen):
+            if(zeile != self.zielposition.zeile):
+                diese_zeile = zg.generiere_random_chars(self.sk.spalten, blocked_char=self.zielsymbol)
+            else:
+                laenge_vor   = self.zielposition.spalte
+                laenge_nach  = self.sk.spalten - self.zielposition.spalte - self.sk.zielsymbollaenge
+                diese_zeile  = zg.generiere_random_chars(laenge_vor, blocked_char=self.zielsymbol)
+                diese_zeile += self.zielsymbol
+                diese_zeile += zg.generiere_random_chars(laenge_nach, blocked_char=self.zielsymbol)
+            diese_zeile += '\n'
+            self.feld.append(diese_zeile)

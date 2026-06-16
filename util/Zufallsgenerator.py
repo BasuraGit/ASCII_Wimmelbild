@@ -1,18 +1,18 @@
 import random
-from ..game import Koordinate
+from game.Koordinate import Koordinate
 
-def generiere_random_chars(BlockedChar, laenge=1):
-    return [generiere_random_char(BlockedChar) for _ in range(laenge)]
+def generiere_random_chars(laenge=1, *,blocked_char='\0'):
+    return [generiere_random_char(blocked_char) for _ in range(laenge)]
 
-def generiere_random_char(BlockedChar):
+def generiere_random_char(blocked_char):
         while(True):
-            Char = chr(random.randint(33,126))
-            if not(Char.__eq__(BlockedChar)):
+            char = chr(random.randint(33,126))
+            if char != blocked_char:  
                 break
-        return Char
+        return char
 
-def generiere_Position(Spalten, Zeilen, Ziellaenge):
-    Zeile = random.randint(0,Zeilen-1)
-    Spalte = random.randint(0, Spalten-(Ziellaenge+1))
-    Zielposition = Koordinate(Zeile, Spalte)
-    return Zielposition
+def generiere_Position(schwierigkeit):
+    zeile = random.randint(0,schwierigkeit.zeilen-1)
+    spalte = random.randint(0, schwierigkeit.spalten-(schwierigkeit.zielsymbollaenge+1))
+    zielposition = Koordinate(zeile, spalte)
+    return zielposition

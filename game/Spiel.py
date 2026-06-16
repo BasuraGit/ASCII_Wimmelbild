@@ -1,21 +1,24 @@
-import Spielfeld
-import Schwierigkeit
-from ..io import SpielEingabe
-from ..io import SpielAusgabe
+from game.Spielfeld import Spielfeld
+from game.Schwierigkeit import Schwierigkeit
+from game.Timer import Timer
+from ui.SpielEingabe import SpielEingabe
+from ui.SpielAusgabe import SpielAusgabe
 
 class Spiel:
-    def __init__(self, _Konfiguration):
-        self._Spielfeld = Spielfeld(_Konfiguration)
-        self._Schwierigkeit = Schwierigkeit(_Konfiguration)
-        self._Aktuelle_Runde = 1
-        self._Spiel_Ausgabe = SpielAusgabe()
-        self._Spiel_Eingabe = SpielEingabe()
+    def __init__(self, konfiguration):
+        self.konfiguration = konfiguration
+        self.spielfeld = Spielfeld(self.konfiguration)
+        self.schwierigkeit = self.konfiguration.schwierigkeit
+        self.aktuelle_runde = 1
+        self.spiel_ausgabe = SpielAusgabe()
+        self.spiel_eingabe = SpielEingabe()
+        # self.timer = Timer()
     
     def starten(self):
-        self._Spielfeld.generieren()
-        self._Spielfeld.ausgeben()
-        self._Timer.start()
-        self._Spiel_Eingabe.start()
+        self.spielfeld.generieren()
+        self.spiel_ausgabe.zeige_spiel(self.spielfeld)
+        # self.timer.start(self.konfiguration.timer_max)
+        self.spiel_eingabe.start()
     
     def neue_runde(self):
         pass
