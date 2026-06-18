@@ -24,3 +24,4 @@ while zustand != ProgrammZustand.BEENDEN:
 
     elif zustand == ProgrammZustand.ZWISCHENMENUE:
         zustand = zwischen_menue.starten()
+        
