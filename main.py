@@ -3,6 +3,7 @@ from util.Konfiguration import Konfiguration
 from ui.HauptMenue import HauptMenue
 from ui.ZwischenMenue import ZwischenMenue
 from util.Enums import ProgrammZustand
+import asyncio
 
 konfiguration = Konfiguration()
 haupt_menue = HauptMenue()
@@ -10,9 +11,9 @@ zwischen_menue = ZwischenMenue()
 
 spiel=Spiel(konfiguration, haupt_menue)
 
-spiel.starten()
+asyncio.run(spiel.starten())
 
-zustand = ProgrammZustand.HAUPTMENUE
+zustand = ProgrammZustand.SPIEL
 
 while zustand != ProgrammZustand.BEENDEN:
 
@@ -20,7 +21,8 @@ while zustand != ProgrammZustand.BEENDEN:
         zustand = haupt_menue.starten()
 
     elif zustand == ProgrammZustand.SPIEL:
-        zustand = spiel.starten()
+        zustand = asyncio.run(spiel.starten())
 
     elif zustand == ProgrammZustand.ZWISCHENMENUE:
         zustand = zwischen_menue.starten()
+
