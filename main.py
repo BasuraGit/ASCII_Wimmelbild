@@ -11,8 +11,6 @@ zwischen_menue = ZwischenMenue()
 
 spiel=Spiel(konfiguration, haupt_menue)
 
-asyncio.run(spiel.starten())
-
 zustand = ProgrammZustand.SPIEL
 
 while zustand != ProgrammZustand.BEENDEN:
