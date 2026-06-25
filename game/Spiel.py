@@ -4,7 +4,12 @@ from ui.SpielEingabe import SpielEingabe
 from ui.SpielAusgabe import SpielAusgabe
 from ui.ZwischenMenue import ZwischenMenue
 from util.Enums import ErfolgsEnum, ProgrammZustand
-
+import asyncio
+from prompt_toolkit.application import Application
+from prompt_toolkit.layout import Layout
+from prompt_toolkit.layout.containers import HSplit
+from prompt_toolkit.widgets import Label, TextArea
+from prompt_toolkit.key_binding import KeyBindings
 
 class Spiel:
     """
@@ -47,37 +52,91 @@ class Spiel:
         self.haupt_menue = haupt_menue
 
         # Timer für die Zeitbegrenzung.
-        # self.timer = Timer()
+        self.timer = Timer()
 
-    def starten(self):
+
+    async def starten(self):
         """
         Startet eine neue Spielrunde.
 
         Das Spielfeld wird erzeugt und anschließend in der Konsole
         dargestellt.
 
-        Ein ablaufender Timer und die Nutzereingabe werden als Threads erzeugt.
+        Ein ablaufender Timer wird gestartet und der Nutzer kann eine Lösung eingeben.
         """
+        
+        # neues Spielfeld mit einer Instanz des Zielsymbols generieren
         self.spielfeld.generieren()
-        self.spiel_ausgabe.zeige_spiel(self.spielfeld)
 
-        # TODO: TIMER und Eingabe als Threads umsetzen,
-        # um beides gleichzeitig zu machen.
+        # Konsolenausgabe leeren
+        self.spiel_ausgabe.clear_console()
 
-        # completion_event ? threading.Event()
-        #
-        # next_state=list()
-        # timer_thread = Thread(target=self.timer.start, args=(self.konfiguration.timer_max, completion_event, next_state))
-        # input_thread = Thread(target=self.spiel_eingabe.start, args=(completion_event, next_state))
-        # timer_thread.start()
-        # input_thread.start()
-        #
-        # End based on threading.Event() with completion_event.wait()
-        # in thread: completion_event.set()
-        #
-        # more research regarding cleanup and its interaction with event based ending necessary
-        #
-        # return next_state[0]
+
+        # Labels für Formatierte Ausgabe mit promp_toolkit definieren
+        ziel_label = Label(self.spiel_ausgabe.get_zielsymbol(self.spielfeld))
+        timer_label = Label(f"Zeit: 00:{self.konfiguration.timer_max:02d}")
+        feld_label = Label(self.spiel_ausgabe.get_spielfeld(self.spielfeld))
+        input_feld = TextArea(
+            prompt ="Gib die Position des gesuchten Symbols ein (Zeile, Spalte):  ",
+            multiline = False,
+        )
+
+        # Labels im Layout sortieren
+        layout = HSplit([
+            ziel_label,
+            timer_label,
+            feld_label,
+            input_feld,
+        ])
+
+        # Input einrichten
+        self.input_future = asyncio.Future()
+        kb = KeyBindings()
+
+        @kb.add("enter")
+        def _(event):
+            if not self.input_future.done():
+                self.input_future.set_result(input_feld.text)
+
+        # Application definieren
+        self.app = Application(
+            layout=Layout(layout, focused_element=input_feld),
+            key_bindings=kb,
+            full_screen=False
+        )
+
+        # Erzeuge und Starte Timer und Input 
+
+        tasks = [
+            asyncio.create_task(
+                self.timer.start(self.konfiguration.timer_max, timer_label, self.app)
+            ),
+            asyncio.create_task(
+                self.spiel_eingabe.start(self.input_future, self.spielfeld.zielposition)
+                )
+        ]
+
+        # Application starten ( Ausgabe )
+        app_task = asyncio.create_task(
+            self.app.run_async()
+        )
+
+        fertige_task, pending_task = await asyncio.wait(
+            tasks,
+            return_when = asyncio.FIRST_COMPLETED
+        )
+
+        # Lies rückgegeben ErfolgsCode von erster beendeter Funktion
+        erfolg = fertige_task.pop().result()
+        self.app.exit()
+
+        await app_task
+        
+        for task in pending_task:
+            task.cancel()
+
+        # Aufgrund von Rückgabewert zum Hauptmenü oder ins Zwischenmenü springen
+        return self.auswerten(erfolg)
 
     def neue_runde(self):
         """

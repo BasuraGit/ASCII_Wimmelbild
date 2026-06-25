@@ -2,9 +2,10 @@ from game.Schwierigkeit import Schwierigkeit
 
 class Konfiguration:
     def __init__(self):
-        self.schwierigkeit = Schwierigkeit(5,5,1,0,1)
+        self.schwierigkeit = Schwierigkeit(15,15,1,0,0)
         self.timer_max = 60
-    
+        
+
     def reduce_timer_max(self):
         if self.timer_max > 30:
             self.timer_max -= 10

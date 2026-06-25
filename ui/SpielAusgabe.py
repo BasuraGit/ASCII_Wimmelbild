@@ -6,37 +6,19 @@ class SpielAusgabe:
     in der Konsole.
     """
 
-    def zeige_spiel(self, spielfeld):
-        """
-        Gibt alle für die aktuelle Spielrunde relevanten Informationen aus.
-        Dazu gehören das gesuchte Symbol, das Spielfeld sowie die
-        Aufforderung zur Eingabe der gesuchten Position.
+    def __init__(self):
+        self.gedruckte_zeilen = 0
 
-        Parameter:
-            spielfeld: Das aktuell verwendete Spielfeldobjekt.
-        """
 
-        self.zeige_zielsymbol(spielfeld)
-        self.zeige_spielfeld(spielfeld)
-        self.zeige_input()
-   
-
-    def zeige_zielsymbol(self, spielfeld):
+    def get_zielsymbol(self, spielfeld):
         """
         Gibt das vom Nutzer zu suchende Symbol aus.
 
         Parameter:
             spielfeld: Das aktuell verwendete Spielfeldobjekt.
         """
-        print("Das gesuchte Symbol ist: " + spielfeld.zielsymbol)
-
-
-    def zeige_input(self):
-        """
-        Gibt die Eingabeaufforderung für die Position des gesuchten
-        Symbols aus.
-        """
-        print("Gib die Position des gesuchten Symbols ein (Zeile, Spalte): ")
+        return f"Das gesuchte Symbol ist: {spielfeld.zielsymbol}\n"
+        
 
 
     def zeige_rueckmeldung(self, erfolg: ErfolgsEnum):
@@ -75,15 +57,13 @@ class SpielAusgabe:
         Rückgabewert:
             Zeichenkette zur Darstellung des Indexes.
         """
-        if(index<9):
-            index += 1
-            index = f"{index}"
-        elif(index<35):
-            index = chr(65 + index - 9)
+
+        if(index<26):
+            index = chr(65 + index)
         return index
     
 
-    def zeige_spielfeld(self, spielfeld):
+    def get_spielfeld(self, spielfeld):
         """
         Gibt das aktuelle Spielfeld inklusive Zeilen- und
         Spaltenbeschriftung in der Konsole aus.
@@ -95,15 +75,17 @@ class SpielAusgabe:
             spielfeld: Das aktuell verwendete Spielfeldobjekt.
         """
         schwierigkeit = spielfeld.konfiguration.schwierigkeit
-        index_string = "\t"
+        index_string = "    "
+        print_list = list()
 
         # Erzeugt die Beschriftung der Spalten.
         for spalte in range(schwierigkeit.spalten):
             
             index_string += self.get_index_char(spalte) + " " * schwierigkeit.spalten_abstand
 
-        print(index_string)
-        print()
+        print_list.append(index_string + "\n")        
+        print_list.append("\n")        
+
 
         zeilencounter = 0
 
@@ -111,14 +93,20 @@ class SpielAusgabe:
         for zeile in spielfeld.feld:
 
             # Fügt die Zeilenbeschriftung hinzu.
-            zeilenstring = self.get_index_char(zeilencounter) + "\t"
+            zeilenstring = self.get_index_char(zeilencounter) + "   "
             zeilencounter += 1
 
             # Fügt die Zeichen der aktuellen Zeile hinzu.
             for char in zeile:
                 zeilenstring += char + schwierigkeit.spalten_abstand * " "
-            print(zeilenstring)
+            print_list.append(zeilenstring + "\n")        
+
 
             # Fügt Leerzeilen zwischen den Spielfeldzeilen ein.
             for i in range(schwierigkeit.zeilen_abstand):
-                print()
+                print_list.append("\n")  
+
+        return "".join(print_list)      
+
+    def clear_console(self):
+        print("\033[H\033[3J", end="")
