@@ -1,4 +1,5 @@
 from util import Zufallsgenerator as zg
+from util.Konfiguration import Konfiguration as Konfig
 
 
 class Spielfeld:
@@ -10,7 +11,7 @@ class Spielfeld:
     zufälligen Inhalte des Spielfelds.
     """
 
-    def __init__(self, konfiguration):
+    def __init__(self, konfiguration: Konfig):
         """
         Initialisiert das Spielfeld mit der übergebenen Konfiguration.
 

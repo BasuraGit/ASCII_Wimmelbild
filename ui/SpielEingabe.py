@@ -1,8 +1,18 @@
+from game.Schwierigkeit import Schwierigkeit as sk
+from game.Koordinate import Koordinate as pos
 from util.Enums import ErfolgsEnum
+from prompt_toolkit.widgets import Label
+from asyncio import Queue
 
 class SpielEingabe:
     
-    async def start(self, input_future, ziel_pos):
+    async def start(
+        self, 
+        input_queue: Queue, 
+        ziel_pos: pos, 
+        schwierigkeit: sk, 
+        feedback_label: Label
+    ):
                
         ein_position = await input_future
 

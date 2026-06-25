@@ -4,7 +4,10 @@ from ui.SpielEingabe import SpielEingabe
 from ui.SpielAusgabe import SpielAusgabe
 from ui.ZwischenMenue import ZwischenMenue
 from util.Enums import ErfolgsEnum, ProgrammZustand
+from util.Konfiguration import Konfiguration as Konfig
+
 import asyncio
+
 from prompt_toolkit.application import Application
 from prompt_toolkit.layout import Layout
 from prompt_toolkit.layout.containers import HSplit
@@ -19,14 +22,12 @@ class Spiel:
     wie Spielfeld, Ein- und Ausgabe sowie die Menüsteuerung.
     """
 
-    def __init__(self, konfiguration, haupt_menue):
+    def __init__(self, konfiguration: Konfig):
         """
         Initialisiert eine neue Spielinstanz.
 
         Parameter:
             konfiguration: Enthält die aktuellen Spieleinstellungen.
-            haupt_menue: Referenz auf das Hauptmenü, um nach Spielende
-                          dorthin zurückkehren zu können.
         """
         self.konfiguration = konfiguration
 
@@ -44,12 +45,6 @@ class Spiel:
 
         # Zuständig für die Eingaben des Nutzers.
         self.spiel_eingabe = SpielEingabe()
-
-        # Menü zwischen zwei Spielrunden.
-        self.zwischen_menue = ZwischenMenue()
-
-        # Referenz auf das Hauptmenü.
-        self.haupt_menue = haupt_menue
 
         # Timer für die Zeitbegrenzung.
         self.timer = Timer()
@@ -93,6 +88,7 @@ class Spiel:
         self.input_future = asyncio.Future()
         kb = KeyBindings()
 
+        # Input an SpielEingabe "nachreichen" wenn Enter gedrückt wird 
         @kb.add("enter")
         def _(event):
             if not self.input_future.done():
@@ -128,10 +124,12 @@ class Spiel:
 
         # Lies rückgegeben ErfolgsCode von erster beendeter Funktion
         erfolg = fertige_task.pop().result()
+        
+        # Beende und warte auf beenden der Durchlaufsanzeige
         self.app.exit()
-
         await app_task
         
+        # Beende die Task die nicht als Erstes fertig war
         for task in pending_task:
             task.cancel()
 

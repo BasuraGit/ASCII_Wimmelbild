@@ -1,3 +1,4 @@
+from game.Spielfeld import Spielfeld as sf
 from util.Enums import ErfolgsEnum
 
 class SpielAusgabe:
@@ -10,7 +11,7 @@ class SpielAusgabe:
         self.gedruckte_zeilen = 0
 
 
-    def get_zielsymbol(self, spielfeld):
+    def get_zielsymbol(self, spielfeld: sf):
         """
         Gibt das vom Nutzer zu suchende Symbol aus.
 
@@ -63,7 +64,7 @@ class SpielAusgabe:
         return index
     
 
-    def get_spielfeld(self, spielfeld):
+    def get_spielfeld(self, spielfeld: sf):
         """
         Gibt das aktuelle Spielfeld inklusive Zeilen- und
         Spaltenbeschriftung in der Konsole aus.
