@@ -75,6 +75,7 @@ class Spiel:
             prompt ="Gib die Position des gesuchten Symbols ein (Zeile, Spalte):  ",
             multiline = False,
         )
+        feedback_label = Label("")
 
         # Labels im Layout sortieren
         layout = HSplit([
@@ -82,17 +83,17 @@ class Spiel:
             timer_label,
             feld_label,
             input_feld,
+            feedback_label
         ])
 
         # Input einrichten
-        self.input_future = asyncio.Future()
+        self.input_queue = asyncio.Queue()
         kb = KeyBindings()
 
         # Input an SpielEingabe "nachreichen" wenn Enter gedrückt wird 
         @kb.add("enter")
         def _(event):
-            if not self.input_future.done():
-                self.input_future.set_result(input_feld.text)
+            self.input_queue.put_nowait(input_feld.text)
 
         # Application definieren
         self.app = Application(
@@ -108,7 +109,11 @@ class Spiel:
                 self.timer.start(self.konfiguration.timer_max, timer_label, self.app)
             ),
             asyncio.create_task(
-                self.spiel_eingabe.start(self.input_future, self.spielfeld.zielposition)
+                self.spiel_eingabe.start(
+                    self.input_queue, 
+                    self.spielfeld.zielposition,
+                    self.schwierigkeit, 
+                    feedback_label)
                 )
         ]
 
