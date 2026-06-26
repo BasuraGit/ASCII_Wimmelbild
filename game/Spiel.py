@@ -43,6 +43,15 @@ class Spiel:
         # Zählt die aktuell gespielte Runde.
         self.aktuelle_runde = 1
 
+        # Zählt die erfolgreich gelösten Runden.
+        self.score = 0
+
+        # Merkt sich die Restzeit für die nächste Runde.
+        self.restzeit = self.konfiguration.timer_max
+
+        # Speichert den letzten Erfolgszustand für das Zwischenmenü.
+        self.letzter_erfolg = None
+
         # Zuständig für die Konsolenausgabe.
         self.spiel_ausgabe = SpielAusgabe()
 
@@ -72,7 +81,7 @@ class Spiel:
 
         # Labels für Formatierte Ausgabe mit promp_toolkit definieren
         ziel_label = Label(self.spiel_ausgabe.get_zielsymbol(self.spielfeld))
-        timer_label = Label(f"Zeit: 00:{self.konfiguration.timer_max:02d}")
+        timer_label = Label(f"Zeit: 00:{self.restzeit:02d}")
         feld_label = Label(self.spiel_ausgabe.get_spielfeld(self.spielfeld))
         input_feld = TextArea(
             prompt ="Gib die Position des gesuchten Symbols ein (Zeile, Spalte):  ",
@@ -109,7 +118,7 @@ class Spiel:
 
         tasks = [
             asyncio.create_task(
-                self.timer.start(self.konfiguration.timer_max, timer_label, self.app)
+                self.timer.start(self.restzeit, timer_label, self.app)
             ),
             asyncio.create_task(
                 self.spiel_eingabe.start(
@@ -153,8 +162,14 @@ class Spiel:
         Die Rundenanzahl wird mitgezählt.
         """
         self.aktuelle_runde += 1
-        self.konfiguration.reduce_timer_max()
         self.starten()
+
+    def neues_spiel(self):
+        """Setzt den Spielstand für einen neuen Durchlauf zurück."""
+        self.aktuelle_runde = 1
+        self.score = 0
+        self.restzeit = self.konfiguration.timer_max
+        self.letzter_erfolg = None
 
     def auswerten(self, erfolgscode: ErfolgsEnum):
         """
@@ -167,11 +182,20 @@ class Spiel:
         Parameter:
             erfolgscode: Enum-Wert, der das Ergebnis der Runde beschreibt.
         """
-        self.spiel_ausgabe.zeige_rueckmeldung(erfolgscode)
+        self.letzter_erfolg = erfolgscode
 
         if (erfolgscode == ErfolgsEnum.RIGHTINPUT):
+            self.spiel_ausgabe.zeige_rueckmeldung(erfolgscode)
+            self.score += 1
+            self.aktuelle_runde += 1
+            self.restzeit = self.timer.letzte_restzeit
+            return ProgrammZustand.ZWISCHENMENUE
+        elif (erfolgscode == ErfolgsEnum.TIMEOUT):
+            self.restzeit = self.timer.letzte_restzeit
             return ProgrammZustand.ZWISCHENMENUE
         else:
+            self.spiel_ausgabe.zeige_rueckmeldung(erfolgscode)
+            self.restzeit = self.konfiguration.timer_max
             return ProgrammZustand.HAUPTMENUE
 
     def beenden(self):

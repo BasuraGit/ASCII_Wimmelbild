@@ -10,8 +10,10 @@ class Timer:
         timer_label: Label, 
         app: app
     ):
-        
+        self.letzte_restzeit = timer_max
+
         for time in range(timer_max, -1, -1):
+            self.letzte_restzeit = time
             timer_label.text = f"Zeit: 00:{time:02d}"
             app.invalidate()
             await asyncio.sleep(1)
