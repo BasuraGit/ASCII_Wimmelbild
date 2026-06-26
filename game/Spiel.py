@@ -5,6 +5,7 @@ from ui.SpielAusgabe import SpielAusgabe
 from ui.ZwischenMenue import ZwischenMenue
 from util.Enums import ErfolgsEnum, ProgrammZustand
 from util.Konfiguration import Konfiguration as Konfig
+from ui.HauptMenue import HauptMenue as Menu
 
 import asyncio
 
@@ -22,7 +23,7 @@ class Spiel:
     wie Spielfeld, Ein- und Ausgabe sowie die Menüsteuerung.
     """
 
-    def __init__(self, konfiguration: Konfig):
+    def __init__(self, konfiguration: Konfig, menu: Menu):
         """
         Initialisiert eine neue Spielinstanz.
 
@@ -30,6 +31,8 @@ class Spiel:
             konfiguration: Enthält die aktuellen Spieleinstellungen.
         """
         self.konfiguration = konfiguration
+
+        self.menu = Menu
 
         # Erzeugt das Spielfeld auf Basis der aktuellen Konfiguration.
         self.spielfeld = Spielfeld(self.konfiguration)
