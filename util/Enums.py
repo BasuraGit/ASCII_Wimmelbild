@@ -7,6 +7,7 @@ class ErfolgsEnum(Enum):
 
 class ProgrammZustand(Enum):
     HAUPTMENUE = auto()
-    SPIEL = auto()
     ZWISCHENMENUE = auto()
+    EINSTELLUNGEN = auto()
+    SPIEL = auto()
     BEENDEN = auto()

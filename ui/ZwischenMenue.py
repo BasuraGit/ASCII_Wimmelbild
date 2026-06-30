@@ -23,17 +23,20 @@ class ZwischenMenue:
             print("================================")
             print(f"Dein Score: {spiel.score}")
             print()
-            print("1. Spiel erneut starten")
-            print("2. Zum Hauptmenü")
+            print("1: Spiel erneut starten")
+            print("2: Zum Hauptmenü")
+            print("3: Spiel beenden")
             print()
 
             auswahl = input("Auswahl: ")
 
             if auswahl == "1":
-                spiel.neues_spiel()
+                spiel.neues_spiel(None)
                 return ProgrammZustand.SPIEL
-            if auswahl == "2":
+            elif auswahl == "2":
                 return ProgrammZustand.HAUPTMENUE
+            elif auswahl == "3":
+                return ProgrammZustand.BEENDEN
 
             input("Ungültige Eingabe. Enter zum Fortfahren...")
 
