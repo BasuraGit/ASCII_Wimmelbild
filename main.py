@@ -11,7 +11,7 @@ haupt_menue = HauptMenue()
 zwischen_menue = ZwischenMenue()
 einstellungen = Einstellungen()
 
-spiel=Spiel(konfiguration, haupt_menue)
+spiel= Spiel(konfiguration)
 
 zustand = ProgrammZustand.HAUPTMENUE
 

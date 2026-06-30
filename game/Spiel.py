@@ -23,7 +23,7 @@ class Spiel:
     wie Spielfeld, Ein- und Ausgabe sowie die Menüsteuerung.
     """
 
-    def __init__(self, konfiguration: Konfig, menu: Menu):
+    def __init__(self, konfiguration: Konfig):
         """
         Initialisiert eine neue Spielinstanz.
 
@@ -32,7 +32,6 @@ class Spiel:
         """
         self.konfiguration = konfiguration
 
-        self.menu = Menu
 
         # Erzeugt das Spielfeld auf Basis der aktuellen Konfiguration.
         self.spielfeld = Spielfeld(self.konfiguration)
@@ -164,11 +163,15 @@ class Spiel:
         self.aktuelle_runde += 1
         self.starten()
 
-    def neues_spiel(self):
+    def neues_spiel(self, konfiguration: Konfig):
         """Setzt den Spielstand für einen neuen Durchlauf zurück."""
         self.aktuelle_runde = 1
         self.score = 0
-        self.restzeit = self.konfiguration.timer_max
+        if konfiguration:
+            self.restzeit = konfiguration.timer_max
+            self.schwierigkeit = konfiguration.schwierigkeit
+        else:
+            self.restzeit = self.konfiguration.timer_max
         self.letzter_erfolg = None
 
     def auswerten(self, erfolgscode: ErfolgsEnum):
@@ -190,24 +193,12 @@ class Spiel:
             self.aktuelle_runde += 1
             self.restzeit = self.timer.letzte_restzeit
             return ProgrammZustand.ZWISCHENMENUE
+        
         elif (erfolgscode == ErfolgsEnum.TIMEOUT):
             self.restzeit = self.timer.letzte_restzeit
             return ProgrammZustand.ZWISCHENMENUE
+        
         else:
             self.spiel_ausgabe.zeige_rueckmeldung(erfolgscode)
             self.restzeit = self.konfiguration.timer_max
             return ProgrammZustand.HAUPTMENUE
-
-    def beenden(self):
-        """
-        Beendet die aktuelle Spielrunde.
-
-        Der Ablauf entspricht einem Zeitüberschreitungsereignis.
-        Die Auswertung erfolgt daher mit dem entsprechenden
-        Erfolgsstatus.
-
-        Die Beendigung des Timer-Threads ist als zukünftige
-        Erweiterung vorgesehen.
-        """
-        # Timer thread beenden
-        self.auswerten(ErfolgsEnum.TIMEOUT)
