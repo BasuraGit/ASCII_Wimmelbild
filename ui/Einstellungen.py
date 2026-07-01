@@ -80,7 +80,7 @@ Gib eine Zahl zwischen 15 und 60 Sekunden ein.""")
         print(f"     Spielfeldhöhe:  {konfiguration.schwierigkeit.zeilen} zeilen")
         print("================================")
         print("""Stellt die Höhe des Spielfeldes ein.
-                 Die Anzahl der Zeilen muss zwischen 5 und 26 liegen.""")
+                 Die Anzahl der Zeilen muss zwischen 5 und 18 liegen.""")
         print(f"Derzeitiger Wert: {konfiguration.schwierigkeit.zeilen}")
         print()
         
@@ -88,7 +88,7 @@ Gib eine Zahl zwischen 15 und 60 Sekunden ein.""")
             try:
                 auswahl = int(input("Auswahl: "))
 
-                if auswahl <= 26 and auswahl>= 5:
+                if auswahl <= 18 and auswahl>= 5:
                     konfiguration.schwierigkeit.zeilen = auswahl
                     break
                 print("Zahl außerhalb des Wertebereichs. Versuche es erneut.")
