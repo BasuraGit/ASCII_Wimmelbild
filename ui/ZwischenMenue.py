@@ -45,6 +45,7 @@ class ZwischenMenue:
         print("================================")
         print("         Nächste Runde")
         print("================================")
+        print("Sehr Gut! Das war die richtige Position.")
         print(f"Aktueller Score: {spiel.score}")
         print()
         input("Enter drücken für die nächste Spielrunde...")
