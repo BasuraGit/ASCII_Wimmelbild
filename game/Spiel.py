@@ -188,9 +188,7 @@ class Spiel:
         self.letzter_erfolg = erfolgscode
 
         if (erfolgscode == ErfolgsEnum.RIGHTINPUT):
-            self.spiel_ausgabe.zeige_rueckmeldung(erfolgscode)
             self.score += 1
-            self.aktuelle_runde += 1
             self.restzeit = self.timer.letzte_restzeit
             return ProgrammZustand.ZWISCHENMENUE
         
@@ -199,6 +197,5 @@ class Spiel:
             return ProgrammZustand.ZWISCHENMENUE
         
         else:
-            self.spiel_ausgabe.zeige_rueckmeldung(erfolgscode)
             self.restzeit = self.konfiguration.timer_max
             return ProgrammZustand.HAUPTMENUE

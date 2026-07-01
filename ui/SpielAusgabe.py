@@ -21,23 +21,6 @@ class SpielAusgabe:
         return f"Das gesuchte Symbol ist: {spielfeld.zielsymbol}\n"
         
 
-
-    def zeige_rueckmeldung(self, erfolg: ErfolgsEnum):
-        """
-        Gibt eine Rückmeldung über das Ergebnis der Nutzereingabe aus.
-
-        Parameter:
-            Erfolg: Enum-Wert, der den Ausgang der Runde beschreibt.
-        """
-        if(erfolg == ErfolgsEnum.RIGHTINPUT):
-            print("Sehr Gut! Das war die richtige Position.")
-        elif(erfolg == ErfolgsEnum.WRONGINPUT):
-            print("Das war leider nicht die richtige Position.")
-        elif(erfolg == ErfolgsEnum.TIMEOUT):
-            print("Du warst leider zu langsam. Die Zeit ist abgelaufen.")
-        else:
-            print("Fehler bei der Auswertung.")
-
     def get_index_char(self, index):
         """
         Wandelt einen numerischen Index in eine für die Anzeige geeignete
